@@ -1,10 +1,21 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+# from urllib import request
 
+from django.shortcuts import render
+
+
+tasks = [
+    {'id':1,'task':'wakeup'},
+    {'id':2,'task':'code'},
+    {'id':3,'task':'sleep'}
+]
+userInfo ={'id':1,'userName':'Anas'}
 # Create your views here.
 
-def home(req):
-    return HttpResponse('<h1>Home Page</h1>')
+def home(req,userName):
+    context = {'tasks':tasks,'userInfo':userInfo,'userName':userName}
+    return render(req,'base/home.html',context )
 
-def room(req):
-    return HttpResponse('<h1>Room Page</h1>')
+def complete(req,userName):
+   context = {'userName':userName,'userInfo':userInfo}
+
+   return render(req,'base/complete.html',context)

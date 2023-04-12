@@ -1,0 +1,11 @@
+{% extends 'main.html' %} {% block content%}
+<h1>Welcome {{userName}}</h1>
+
+<div>
+  <div>
+    {% for task in tasks%}
+    <h3>{{task.id}} -- {{task.task}}</h3>
+    {% endfor%}
+  </div>
+</div>
+{% endblock content %}
