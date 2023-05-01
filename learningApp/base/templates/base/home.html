@@ -1,11 +1,24 @@
 {% extends 'main.html' %} {% block content%}
-<h1>Welcome {{userName}}</h1>
+<h1>Welcome {{userInfo.userName}}</h1>
 
 <div>
   <div>
-    {% for task in tasks%}
+    {% for task in tasks%}{%csrf_token%}
     <h3>{{task.id}} -- {{task.task}}</h3>
-    {% endfor%}
+    <a href="{% url 'update_task' task.id %}">Edit Task</a>
+    <div>
+      <a href="{% url 'delete_task' task.id %}">delete</a>
+      {% if task.completed %}
+
+      <small>Complete Task</small>
+      {% elif not task.completed %}
+      <small>Uncomplete Task</small>
+    </div>
+    <!-- <form action="" method="post">
+      {%csrf_token%}
+      <input type="submit" value="delete" />
+    </form> -->
+    {% endif %} {% endfor%}
   </div>
 </div>
 {% endblock content %}
