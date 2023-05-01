@@ -3,10 +3,32 @@
 from django.shortcuts import render, redirect
 from .models import Task
 from .forms import TaskFrom
-
-
-userInfo ={'id':'anas','userName':'Anas'}
+from django.db.models import Q # for using or, and operations with db 
+from django.contrib.auth.models import User
+from django.contrib import  messages
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
+def loginPage(req):
+      if req.method == 'POST':
+         username = req.POST.get('username')
+         password = req.POST.get('password')
+         try:
+            user = User.objects.get(username= username)
+         except:
+            messages.error(req, "User Does not Exist")
+         user = authenticate(req, username=username,password=password)
+         if user is not None:
+            login(req,user)
+            return redirect('home')
+         else:
+           
+            messages.error(req, "username or password does not exist")
+
+      context = {}
+      return render(req,'base/user_form.html',context)
+def logoutUser(req):
+   logout(req)
+   return redirect('home')
 
 def home(req):
     tasks = Task.objects.filter(user_id=2)
@@ -16,12 +38,11 @@ def home(req):
             form.save()
             # return redirect('home')
 
-    context = {'tasks':tasks,'userInfo':userInfo}
+    context = {'tasks':tasks}
     return render(req,'base/home.html',context )
 
-def complete(req,userName):
-   context = {'userName':userName,'userInfo':userInfo}
-   return render(req,'base/complete.html',context)
+def complete(req):
+   return render(req,'base/complete.html')
 
 def add_task(req):
    form = TaskFrom()
@@ -30,7 +51,7 @@ def add_task(req):
       if form.is_valid():
         form.save()
         return redirect('home')
-   context = {'userInfo':userInfo,'form':form}
+   context = {'form':form}
    return render(req,'base/task_form.html',context)
 
 def update_task(req,pk):

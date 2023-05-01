@@ -2,10 +2,15 @@
   <span>Home</span>
 </a>
 
-<a href="/complete/{{userInfo.userName}}/">
+<a href="{% url 'complete'  %}">
   <span>complete</span>
 </a>
 <a href="/add_task">
   <span>Add Task</span>
 </a>
+{% if request.user.is_authenticated%}
+<a href="{% url 'logout' %}">Logout</a>
+{% else %}
+<a href="{% url 'login' %}">Login</a>
+{% endif %}
 <hr />
